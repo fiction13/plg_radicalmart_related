@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   RadicalMart - Related
+  ~ @version   __DEPLOY_VERSION__
+  ~ @author    Dmitriy Vasyukov - https://fictionlabs.ru
+  ~ @copyright Copyright (c) 2024 Fictionlabs. All rights reserved.
+  ~ @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
+  ~ @link      https://fictionlabs.ru/
+  -->
+
+<extension version="4.2" type="plugin" group="radicalmart" method="upgrade">
+    <name>PLG_RADICALMART_RELATED</name>
+    <creationDate>July 2023</creationDate>
+    <author>Dmitriy Vasyukov</author>
+    <copyright>Copyright (C) 2005 - 2022 Open Source Matters. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>info@fictionlabs.ru</authorEmail>
+    <authorUrl>https://fictionlabs.ru</authorUrl>
+    <version>1.1.1-dev</version>
+    <description>PLG_RADICALMART_RELATED_DESCRIPTION</description>
+    <namespace path="src">Joomla\Plugin\RadicalMart\Related</namespace>
+    <scriptfile>script.php</scriptfile>
+
+    <!-- Plugin languages -->
+    <languages folder="language">
+        <language tag="en-GB">en-GB/plg_radicalmart_related.ini</language>
+        <language tag="en-GB">en-GB/plg_radicalmart_related.sys.ini</language>
+        <language tag="ru-RU">ru-RU/plg_radicalmart_related.ini</language>
+        <language tag="ru-RU">ru-RU/plg_radicalmart_related.sys.ini</language>
+    </languages>
+
+    <!-- Files -->
+    <files>
+        <folder>forms</folder>
+        <folder>services</folder>
+        <folder>tmpl</folder>
+        <folder plugin="related">src</folder>
+    </files>
+
+    <!-- Plugin layouts -->
+    <layouts destination="plugins/radicalmart/related" folder="layouts">
+        <folder>display</folder>
+    </layouts>
+
+    <!-- Update server -->
+    <updateservers>
+        <server type="extension" priority="1" name="RadicalMart: Related">
+            https://sovmart.ru/update?element=plg_radicalmart_related
+        </server>
+    </updateservers>
+</extension>

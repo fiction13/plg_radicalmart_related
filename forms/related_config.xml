@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   RadicalMart - Related
+  ~ @version   __DEPLOY_VERSION__
+  ~ @author    Dmitriy Vasyukov - https://fictionlabs.ru
+  ~ @copyright Copyright (c) 2024 Fictionlabs. All rights reserved.
+  ~ @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
+  ~ @link      https://fictionlabs.ru/
+  -->
+
+<form addfieldprefix="Joomla\Component\RadicalMart\Administrator\Field">
+    <fieldset name="related">
+
+        <field name="related_enable" type="radio"
+               label="PLG_RADICALMART_RELATED_PARAMS_ENABLE"
+               layout="joomla.form.field.radio.switcher"
+               default="0">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="related_blocks"
+               type="subform"
+               label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS"
+               multiple="true"
+               showon="related_enable:1"
+        >
+            <form addfieldprefix="Joomla\Plugin\RadicalMart\Related\Field">
+                <field name="title"
+                       type="text"
+                       label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS_TITLE"/>
+
+                <field
+                        name="display"
+                        type="list"
+                        label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY"
+                        size="1"
+                        layout="joomla.form.field.list-fancy-select"
+                        default="">
+                    <option value="">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_NONE</option>
+                    <option value="1">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_AFTER_TITLE
+                    </option>
+                    <option value="2">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_AFTER_DISPLAY
+                    </option>
+                    <option value="3">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_BEFORE_DISPLAY
+                    </option>
+                </field>
+
+                <field name="type"
+                       type="list"
+                       label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS_TYPE"
+                       default="manual"
+                       layout="joomla.form.field.list-fancy-select"
+                       showon="display!:"
+                >
+                    <option value="manual">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_TYPE_MANUAL</option>
+                    <option value="fields">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_TYPE_FIELDS</option>
+                    <option value="category">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_TYPE_CATEGORY</option>
+                </field>
+
+                <field name="field"
+                       type="fields"
+                       key="alias"
+                       label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS_FIELD"
+                       layout="joomla.form.field.list-fancy-select"
+                       showon="type:fields"
+                />
+
+                <field name="category"
+                       type="categories"
+                       label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS_CATEGORY"
+                       layout="joomla.form.field.list-fancy-select"
+                       showon="type:category"
+                >
+                    <option value="-1">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_CATEGORY_CURRENT</option>
+                </field>
+
+                <field name="limit"
+                       type="number"
+                       label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS_LIMIT"
+                       first="1"
+                       step="1"
+                       default="3"
+                       filter="integer"
+                       showon="type!:manual"
+                />
+
+                <field name="layout" type="layout"
+                       label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS_LAYOUT"
+                       default="default"
+                       class="form-select"
+                       plugin="related"
+                       plugin_type="radicalmart"
+                       showon="display!:"
+                />
+
+                <field name="alias"
+                       type="hidden"/>
+            </form>
+        </field>
+    </fieldset>
+</form>
