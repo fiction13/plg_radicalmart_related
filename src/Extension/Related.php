@@ -101,8 +101,6 @@ class Related extends CMSPlugin implements SubscriberInterface
 			// Set params
 			$item->params = $params->toString();
 		}
-
-//		d($item);
 	}
 
 	/**
@@ -157,8 +155,11 @@ class Related extends CMSPlugin implements SubscriberInterface
 		{
 			// Fields
 			$fields   = array();
-			$category = $data->category ?? $data['category'] ?? Factory::getApplication()->getInput()->get('jform')['category'] ?? null;
-			$config   = !empty($category) ? ParamsHelper::getCategoryParams($category) : ParamsHelper::getComponentParams();
+			$formData = Factory::getApplication()->getInput()->get('jform');
+
+			$category = (new Registry($data))->get('category') ?? $formData ?? $formData['category'] ?? null;
+//			$config   = !empty($category) ? ParamsHelper::getCategoryParams($category) : ParamsHelper::getComponentParams();
+			$config = ParamsHelper::getComponentParams();
 
 			if (empty($category))
 			{
@@ -248,6 +249,8 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @param   Event  $event  The event.
 	 *
+	 * @return  void
+	 *
 	 * @throws  \Exception
 	 *
 	 * @since   __DEPLOY_VERSION__
@@ -258,8 +261,8 @@ class Related extends CMSPlugin implements SubscriberInterface
 		$item    = $event->getArgument(1);
 		$params  = $event->getArgument(2);
 		$result  = $event->getArgument('result', []);
-		$display = $this->display($context, $item, $params, 1);
-		$result  = array_merge($result, $display);
+
+		$result[] = $this->display($context, $item, $params, 1);
 
 		$event->setArgument('result', $result);
 	}
@@ -269,7 +272,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @param   Event  $event  The event.
 	 *
-	 * @return  string
+	 * @return  void
 	 *
 	 * @throws  \Exception
 	 *
@@ -281,8 +284,8 @@ class Related extends CMSPlugin implements SubscriberInterface
 		$item    = $event->getArgument(1);
 		$params  = $event->getArgument(2);
 		$result  = $event->getArgument('result', []);
-		$display = $this->display($context, $item, $params, 2);
-		$result  = array_merge($result, $display);
+
+		$result[] = $this->display($context, $item, $params, 2);
 
 		$event->setArgument('result', $result);
 	}
@@ -292,7 +295,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @param   Event  $event  The event.
 	 *
-	 * @return  string
+	 * @return  void
 	 *
 	 * @throws  \Exception
 	 *
@@ -304,8 +307,8 @@ class Related extends CMSPlugin implements SubscriberInterface
 		$item    = $event->getArgument(1);
 		$params  = $event->getArgument(2);
 		$result  = $event->getArgument('result', []);
-		$display = $this->display($context, $item, $params, 3);
-		$result  = array_merge($result, $display);
+
+		$result[] = $this->display($context, $item, $params, 3);
 
 		$event->setArgument('result', $result);
 	}
@@ -318,7 +321,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 * @param   Registry   $params       The params
 	 * @param   int        $displayType  The display type
 	 *
-	 * @return  array
+	 * @return  string
 	 *
 	 * @throws  \Exception
 	 *
@@ -330,16 +333,18 @@ class Related extends CMSPlugin implements SubscriberInterface
 		$params = ParamsHelper::getProductParams($item->id);
 		$app    = Factory::getApplication();
 
+
+
 		if ((int) !$params->get('related_enable'))
 		{
-			return $result;
+			return '';
 		}
 
 		$relatedBlocks = $params->get('related_blocks');
 
 		if (empty($relatedBlocks))
 		{
-			return $result;
+			return '';
 		}
 
 		// Get mode
@@ -356,11 +361,11 @@ class Related extends CMSPlugin implements SubscriberInterface
 				// Render the layout
 				ob_start();
 				include $path;
-				$result[$block->title] = ob_get_clean();
+				$result[] = ob_get_clean();
 			}
 		}
 
-		return $result;
+		return implode("\n", $result);
 	}
 
 	/**
@@ -417,7 +422,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 					return false;
 				}
 
-				$values = (new Registry($product->fields))->get($fieldAlias)->rawvalue;
+				$values = (new Registry($product->fields))->get($fieldAlias)->rawvalue ?? '';
 
 				// Check value exist
 				if (empty($values))

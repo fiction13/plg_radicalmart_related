@@ -37,7 +37,7 @@
                             size="1"
                             layout="joomla.form.field.list-fancy-select"
                             default="">
-                        <option value="">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_NONE</option>
+                        <option value="0">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_NONE</option>
                         <option value="1">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_AFTER_TITLE
                         </option>
                         <option value="2">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_AFTER_DISPLAY
@@ -61,6 +61,7 @@
                     <field name="field"
                            type="fields"
                            key="alias"
+                           state="1"
                            label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS_FIELD"
                            layout="joomla.form.field.list-fancy-select"
                            showon="type:fields"
