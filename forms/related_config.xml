@@ -96,7 +96,10 @@
                 />
 
                 <field name="alias"
-                       type="hidden"/>
+                       label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS_ALIAS"
+                       type="text"
+                       readonly="true"
+                />
             </form>
         </field>
     </fieldset>

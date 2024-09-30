@@ -99,7 +99,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 			$params = $this->normaliseParams($params);
 
 			// Set params
-			$item->params = $params->toString();
+			$item->params = $params->toArray();
 		}
 	}
 
@@ -332,8 +332,6 @@ class Related extends CMSPlugin implements SubscriberInterface
 		$result = array();
 		$params = ParamsHelper::getProductParams($item->id);
 		$app    = Factory::getApplication();
-
-
 
 		if ((int) !$params->get('related_enable'))
 		{

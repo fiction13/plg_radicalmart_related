@@ -10,6 +10,8 @@
 
 <field name="related" type="subform"
        parentclass="stack"
+       fieldname="item"
+       formControl="item"
        layout="joomla.form.field.subform.repeatable"
        multiple="true">
     <form>
