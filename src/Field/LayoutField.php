@@ -3,7 +3,7 @@
  * @package   RadicalMart - Related
  * @version   __DEPLOY_VERSION__
  * @author    Dmitriy Vasyukov - https://fictionlabs.ru
- * @copyright Copyright (c) 2024 Fictionlabs. All rights reserved.
+ * @copyright Copyright (c) 2026 Fictionlabs. All rights reserved.
  * @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
  * @link      https://fictionlabs.ru/
  */
@@ -14,8 +14,8 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Filesystem\Path;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\HTML\HTMLHelper;

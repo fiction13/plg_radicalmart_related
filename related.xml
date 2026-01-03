@@ -3,12 +3,12 @@
   ~ @package   RadicalMart - Related
   ~ @version   __DEPLOY_VERSION__
   ~ @author    Dmitriy Vasyukov - https://fictionlabs.ru
-  ~ @copyright Copyright (c) 2024 Fictionlabs. All rights reserved.
+  ~ @copyright Copyright (c) 2026 Fictionlabs. All rights reserved.
   ~ @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
   ~ @link      https://fictionlabs.ru/
   -->
 
-<extension version="4.2" type="plugin" group="radicalmart" method="upgrade">
+<extension version="5.4" type="plugin" group="radicalmart" method="upgrade">
     <name>PLG_RADICALMART_RELATED</name>
     <creationDate>July 2023</creationDate>
     <author>Dmitriy Vasyukov</author>

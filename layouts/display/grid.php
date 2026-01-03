@@ -3,14 +3,13 @@
  * @package   RadicalMart - Related
  * @version   __DEPLOY_VERSION__
  * @author    Dmitriy Vasyukov - https://fictionlabs.ru
- * @copyright Copyright (c) 2024 Fictionlabs. All rights reserved.
+ * @copyright Copyright (c) 2026 Fictionlabs. All rights reserved.
  * @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
  * @link      https://fictionlabs.ru/
  */
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Component\RadicalMart\Administrator\Helper\ParamsHelper;
@@ -52,6 +51,7 @@ if (!$hidePrice)
 }
 
 ?>
+
 <div class="card h-100 <?php if (empty($product->in_stock)) echo 'opacity-50'; ?>">
 	<div class="card-header position-relative">
 		<a href="<?php echo $product->link; ?>"

@@ -3,14 +3,15 @@
   ~ @package   RadicalMart - Related
   ~ @version   __DEPLOY_VERSION__
   ~ @author    Dmitriy Vasyukov - https://fictionlabs.ru
-  ~ @copyright Copyright (c) 2024 Fictionlabs. All rights reserved.
+  ~ @copyright Copyright (c) 2026 Fictionlabs. All rights reserved.
   ~ @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
   ~ @link      https://fictionlabs.ru/
   -->
 
 <form addfieldprefix="Joomla\Component\RadicalMart\Administrator\Field">
-    <fieldset name="related">
-
+    <fieldset name="related"
+              full_width="true"
+              label="PLG_RADICALMART_RELATED_CONFIG_SETTINGS">
         <field name="related_enable" type="radio"
                label="PLG_RADICALMART_RELATED_PARAMS_ENABLE"
                layout="joomla.form.field.radio.switcher"
@@ -38,12 +39,10 @@
                         layout="joomla.form.field.list-fancy-select"
                         default="">
                     <option value="0">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_NONE</option>
-                    <option value="1">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_AFTER_TITLE
-                    </option>
-                    <option value="2">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_AFTER_DISPLAY
-                    </option>
-                    <option value="3">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_BEFORE_DISPLAY
-                    </option>
+                    <option value="1">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_AFTER_TITLE</option>
+                    <option value="2">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_AFTER_DISPLAY</option>
+                    <option value="3">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_BEFORE_DISPLAY</option>
+                    <option value="4">PLG_RADICALMART_RELATED_PARAMS_BLOCKS_DISPLAY_CUSTOM</option>
                 </field>
 
                 <field name="type"
@@ -94,6 +93,17 @@
                        plugin_type="radicalmart"
                        showon="display!:"
                 />
+
+                <field name="component_layouts"
+                       type="radio"
+                       label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS_COMPONENT_LAYOUTS"
+                       class="btn-group btn-group-yesno"
+                       default="0"
+                       filter="integer"
+                >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
 
                 <field name="alias"
                        label="PLG_RADICALMART_RELATED_PARAMS_BLOCKS_ALIAS"

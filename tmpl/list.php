@@ -3,7 +3,7 @@
  * @package   RadicalMart - Related
  * @version   __DEPLOY_VERSION__
  * @author    Dmitriy Vasyukov - https://fictionlabs.ru
- * @copyright Copyright (c) 2024 Fictionlabs. All rights reserved.
+ * @copyright Copyright (c) 2026 Fictionlabs. All rights reserved.
  * @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
  * @link      https://fictionlabs.ru/
  */
@@ -26,10 +26,13 @@ use Joomla\CMS\Layout\LayoutHelper;
 ?>
 
 <?php if (!empty($products)): ?>
-    <div class="h3"><?php echo Text::_($block->title); ?></div>
+    <div class="mt-3">
+        <div class="h3"><?php echo Text::_($block->title); ?></div>
 
-	<?php foreach ($products as $product)
-	{
-		echo LayoutHelper::render('plugins.radicalmart.related.display.list', ['product' => $product, 'mode' => $mode]);
-	} ?>
+		<?php foreach ($products as $product)
+		{
+			$layout = (int) ($block->component_layouts ?? false) ? 'components.radicalmart.products.item.list' : 'plugins.radicalmart.related.display.list';
+			echo LayoutHelper::render($layout, ['product' => $product, 'mode' => $mode]);
+		} ?>
+    </div>
 <?php endif; ?>

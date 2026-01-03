@@ -3,7 +3,7 @@
  * @package   RadicalMart - Related
  * @version   __DEPLOY_VERSION__
  * @author    Dmitriy Vasyukov - https://fictionlabs.ru
- * @copyright Copyright (c) 2024 Fictionlabs. All rights reserved.
+ * @copyright Copyright (c) 2026 Fictionlabs. All rights reserved.
  * @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
  * @link      https://fictionlabs.ru/
  */
@@ -12,26 +12,19 @@ namespace Joomla\Plugin\RadicalMart\Related\Extension;
 
 \defined('_JEXEC') or die;
 
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Filter\OutputFilter;
+use Joomla\Component\RadicalMart\Administrator\View\FormView;
+use Joomla\Filesystem\Path;
 use Joomla\CMS\Form\Form;
-use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Component\RadicalMart\Administrator\Helper\ParamsHelper;
-use Joomla\Component\RadicalMart\Site\Mapping\CategoryMapping;
-use Joomla\Database\ParameterType;
-use Joomla\Database\QueryInterface;
-use Joomla\Event\DispatcherInterface;
 use Joomla\Event\Event;
 use Joomla\Event\SubscriberInterface;
+use Joomla\Plugin\RadicalMart\Related\Helper\RelatedHelper;
 use Joomla\Registry\Registry;
-use Joomla\String\StringHelper;
-use Joomla\Utilities\ArrayHelper;
-use SimpleXMLElement;
 
 class Related extends CMSPlugin implements SubscriberInterface
 {
@@ -75,56 +68,74 @@ class Related extends CMSPlugin implements SubscriberInterface
 			'onContentPrepareForm'              => 'onContentPrepareForm',
 			'onRadicalMartPrepareConfigForm'    => 'onRadicalMartPrepareConfigForm',
 			'onRadicalMartNormaliseRequestData' => 'onRadicalMartNormaliseRequestData',
+			'onRadicalMartPrepareConfigGroups'  => 'onRadicalMartPrepareConfigGroups',
+			'onRadicalMartPrepareViewTabs'      => 'onRadicalMartPrepareViewTabs',
 			'onContentAfterTitle'               => 'onContentAfterTitle',
 			'onContentBeforeDisplay'            => 'onContentBeforeDisplay',
 			'onContentAfterDisplay'             => 'onContentAfterDisplay',
-			'onExtensionAfterSave'              => 'onExtensionAfterSave'
 		];
 	}
 
 	/**
-	 * Listener for the `onContentNormaliseRequestData` event.
+	 * Trigger `onRadicalMartPrepareConfigGroups` event.
 	 *
-	 * @param   Event  $event  The event.
+	 * @param   array  $groups  Modified groups data.
 	 *
-	 * @throws  \Exception
-	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @return void
 	 */
-	public function onRadicalMartNormaliseRequestData($context, &$item, $form)
+	public function onRadicalMartPrepareConfigGroups(array &$groups)
 	{
-		if ($context === 'com_radicalmart.category')
-		{
-			$params = new Registry($item->params);
-			$params = $this->normaliseParams($params);
+		Factory::getApplication()->getLanguage()->load('plg_radicalmart_related', JPATH_ADMINISTRATOR);
 
-			// Set params
-			$item->params = $params->toArray();
-		}
+		$groups['related'] = [
+			'title'    => 'PLG_RADICALMART_RELATED_CONFIG_TITLE',
+			'key'      => 'related',
+			'sections' => [
+				'settings' => [
+					'title'     => 'PLG_RADICALMART_RELATED_CONFIG_SETTINGS',
+					'key'       => 'related_settings',
+					'type'      => 'fieldsets',
+					'fieldsets' => [
+						'related'
+					],
+				]
+			]
+		];
 	}
 
 	/**
-	 * Listener for the `onExtensionAfterSave` event.
+	 * Trigger `onRadicalMartPrepareViewTabs` event.
 	 *
-	 * @param   Event  $event  The event.
+	 * @param   array     $tabs  Modified view tabs.
+	 * @param   FormView  $view  Current form view class object.
 	 *
-	 * @throws  \Exception
-	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @return void
 	 */
-	public function onExtensionAfterSave(Event $event)
+	public function onRadicalMartPrepareViewTabs(array &$tabs, FormView $view): void
 	{
-		$context = $event->getArgument(0);
-		$table   = $event->getArgument(1);
+		Factory::getApplication()->getLanguage()->load('plg_radicalmart_related', JPATH_ADMINISTRATOR);
 
-		if ($context === 'com_config.component' && $table->element === 'com_radicalmart')
+		$tabs['related'] = [
+			'title'     => 'PLG_RADICALMART_RELATED_PRODUCT_FIELDSET_LABEL',
+			'fieldsets' => [],
+			'ordering'  => 210,
+		];
+	}
+
+	/**
+	 * Trigger `onRadicalMartNormaliseRequestData` event.
+	 *
+	 * @param   string        $context  The execution context.
+	 * @param   object|null  &$objData  Reference to the form data object.
+	 * @param   Form|null     $form     The form object, if available.
+	 *
+	 * @return void
+	 */
+	public function onRadicalMartNormaliseRequestData($context, &$item, $form): void
+	{
+		if ($context === 'com_radicalmart.config')
 		{
-			$params = new Registry($table->params);
-			$params = $this->normaliseParams($params);
-
-			// Store params
-			$table->params = $params->toString();
-			$table->store();
+			$this->normaliseParams($item);
 		}
 	}
 
@@ -145,10 +156,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 
 		$formName = $form->getName();
 
-		if (!Factory::getApplication()->isClient('administrator'))
-		{
-			return;
-		}
+		if (!Factory::getApplication()->isClient('administrator')) return;
 
 		// Product
 		if ($formName === 'com_radicalmart.product')
@@ -158,13 +166,10 @@ class Related extends CMSPlugin implements SubscriberInterface
 			$formData = Factory::getApplication()->getInput()->get('jform');
 
 			$category = (new Registry($data))->get('category') ?? $formData ?? $formData['category'] ?? null;
-//			$config   = !empty($category) ? ParamsHelper::getCategoryParams($category) : ParamsHelper::getComponentParams();
+			// $config   = !empty($category) ? ParamsHelper::getCategoryParams($category) : ParamsHelper::getComponentParams();
 			$config = ParamsHelper::getComponentParams();
 
-			if (empty($category))
-			{
-				return;
-			}
+			if (empty($category)) return;
 
 			// Create form
 			$formXML = new \SimpleXMLElement('<form/>');
@@ -186,15 +191,12 @@ class Related extends CMSPlugin implements SubscriberInterface
 				{
 					if ($row->type === 'manual')
 					{
-						$name = 'plugins_' . $row->alias;
+						$name = 'related_' . $row->alias;
 
 						// Add fields
 						$file = Path::find(JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/forms', 'related_product.xml');
 
-						if (!$file)
-						{
-							continue;
-						}
+						if (!$file) continue;
 
 						$xmlField = simplexml_load_file($file);
 
@@ -216,8 +218,9 @@ class Related extends CMSPlugin implements SubscriberInterface
 						{
 							// Create new related block fieldset
 							$newFieldsetXML = $relatedXML->addChild('fieldset');
-							$newFieldsetXML->addAttribute('name', 'plugins_' . $row->alias);
-							$newFieldsetXML->addAttribute('label', Text::sprintf('PLG_RADICALMART_RELATED_PRODUCT_FIELDSET_LABEL', Text::_($row->title)));
+							$newFieldsetXML->addAttribute('name', $name);
+							$newFieldsetXML->addAttribute('tab', 'related');
+							$newFieldsetXML->addAttribute('label', Text::_($row->title));
 							$newFieldsetXML->addAttribute('description', Text::sprintf('PLG_RADICALMART_RELATED_PRODUCT_FIELDSET_DESCRIPTION_DISPLAY_' . $row->display));
 						}
 					}
@@ -235,13 +238,13 @@ class Related extends CMSPlugin implements SubscriberInterface
 		}
 
 		// Category
-//		if ($formName === 'com_radicalmart.category')
-//		{
-//			// Add path
-//			Form::addFormPath(JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/forms');
-//
-//			$form->loadFile('related_category');
-//		}
+		if ($formName === 'com_radicalmart.category')
+		{
+			// Add path
+			Form::addFormPath(JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/forms');
+
+			$form->loadFile('related_category');
+		}
 	}
 
 	/**
@@ -333,20 +336,17 @@ class Related extends CMSPlugin implements SubscriberInterface
 		$params = ParamsHelper::getProductParams($item->id);
 		$app    = Factory::getApplication();
 
-		if ((int) !$params->get('related_enable'))
-		{
-			return '';
-		}
+		if ((int) !$params->get('related_enable')) return '';
 
 		$relatedBlocks = $params->get('related_blocks');
 
-		if (empty($relatedBlocks))
-		{
-			return '';
-		}
+		if (empty($relatedBlocks)) return '';
+
+		// Load language
+		Factory::getApplication()->getLanguage()->load('com_radicalmart', JPATH_SITE);
 
 		// Get mode
-		$mode = ComponentHelper::getParams('com_radicalmart')->get('mode', 'shop');
+		$mode = ParamsHelper::getComponentParams()->get('mode', 'shop');
 
 		foreach ($relatedBlocks as $block)
 		{
@@ -354,7 +354,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 			{
 				// Get html
 				$path     = PluginHelper::getLayoutPath('radicalmart', 'related', $block->layout);
-				$products = $this->getProducts($item, $block);
+				$products = RelatedHelper::getProducts($item, $block);
 
 				// Render the layout
 				ob_start();
@@ -383,170 +383,38 @@ class Related extends CMSPlugin implements SubscriberInterface
 	}
 
 	/**
-	 * Method to add field value to products list.
+	 * @param   \stdClass  $params
 	 *
-	 * @param   object  $product  The product object.
-	 * @param   object  $block    The related block object.
-	 *
-	 * @return  string|false  Field string values on success, False on failure.
-	 *
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected function getProducts($product, $block)
-	{
-		$ids  = array();
-		$mode = $block->type;
-
-		if ($mode !== 'manual')
-		{
-			// Get products
-			$db    = $this->db;
-			$query = $db->getQuery(true)
-				->select('id')
-				->from($db->quoteName('#__radicalmart_products'))
-				->where($db->qn('id') . ' != :id')
-				->where($db->qn('state') . ' = 1')
-				->setLimit($block->limit)
-				->bind(':id', $product->id, ParameterType::INTEGER);
-
-			if ($mode === 'fields')
-			{
-				$sql        = array();
-				$fieldAlias = $block->field;
-
-				// Check field
-				if (!$fieldAlias)
-				{
-					return false;
-				}
-
-				$values = (new Registry($product->fields))->get($fieldAlias)->rawvalue ?? '';
-
-				// Check value exist
-				if (empty($values))
-				{
-					return false;
-				}
-
-				if (!is_array($values))
-				{
-					$values = (array) $values;
-				}
-
-				foreach ($values as $val)
-				{
-					// Only simple fields
-					if (is_object($val) || is_array($val))
-					{
-						continue;
-					}
-
-					if ($val = trim($val))
-					{
-						$val   = '"' . $val . '"';
-						$sql[] = 'JSON_CONTAINS(fields, ' . $db->q($val) . ', ' . $db->q('$."' . $fieldAlias . '"') . ')';
-					}
-				}
-
-				if (!empty($sql))
-				{
-					$query->where('(' . implode(' OR ', $sql) . ')');
-				}
-			}
-			elseif ($mode === 'category')
-			{
-				// Filter by category state
-				$category = ($block->category === -1) ? Factory::getApplication()->getInput()->get('category') : $block->category;
-
-				if (is_numeric($category) && $category > 1)
-				{
-					$conditionsCategory = ['FIND_IN_SET(' . $category . ', categories)'];
-					foreach (CategoryMapping::getSubCategories($category) as $catid)
-					{
-						$conditionsCategory[] = 'FIND_IN_SET(' . $catid . ', categories)';
-					}
-					$query->extendWhere('AND', $conditionsCategory, 'OR');
-				}
-			}
-
-			// Rand order
-			$query->order('RAND()');
-
-			$ids = $db->setQuery($query)->loadColumn();
-		}
-		else
-		{
-			// Get values
-			$products = json_decode(json_encode($product->plugins->get('related.' . $block->alias, array())), true);
-			$ids      = ArrayHelper::getColumn($products, 'id');
-			$ids      = array_values(array_unique($ids));
-		}
-
-		if (empty($ids))
-		{
-			return false;
-		}
-
-		// Get products via model
-		if (!$model = Factory::getApplication()->bootComponent('com_radicalmart')->getMVCFactory()->createModel('Products', 'Site', ['ignore_request' => true]))
-		{
-			throw new \Exception(Text::_('PLG_RADICALMART_RELATED_ERROR_MODEL_NOT_FOUND'), 500);
-		}
-
-		$model->setState('filter.item_id', $ids);
-		$model->setState('filter.published', 1);
-		$model->setState('list.limit', count($ids));
-
-		// Set rand mode
-		if ($mode !== 'manual')
-		{
-			$model->setState('list.ordering', $db->getQuery(true)->Rand());
-		}
-
-
-		// Set language filter state
-		$model->setState('filter.language', Multilanguage::isEnabled());
-
-		// Get items
-		return $model->getItems();
-	}
-
-
-	/**
-	 * @param   Registry  $params
-	 *
-	 * @return Registry
+	 * @return void
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function normaliseParams($params)
+	public function normaliseParams(\stdClass &$item): void
 	{
-		$relatedBlocks = ArrayHelper::fromObject($params->get('related_blocks', new \stdClass()));
+		$relatedBlocks = $item->related_blocks;
 
-		if (!empty($relatedBlocks))
+		if (empty($relatedBlocks)) return;
+
+		$i = 0;
+
+		foreach ($relatedBlocks as &$block)
 		{
-			$i = 0;
-
-			foreach ($relatedBlocks as &$block)
+			// Create title if empty
+			if (empty($block['title']))
 			{
-				// Create alias
-				if (empty($block['alias']))
-				{
-					$alias          = md5(uniqid(rand(), true));
-					$block['alias'] = $alias;
-				}
-
-				// Create title if empty
-				if (empty($block['title']))
-				{
-					$block['title'] = Text::sprintf('PLG_RADICALMART_RELATED_EMPTY_BLOCK_TITLE', $i + 1);
-				}
-
-				$i++;
+				$block['title'] = Text::sprintf('PLG_RADICALMART_RELATED_EMPTY_BLOCK_TITLE', $i + 1);
 			}
-			$params->set('related_blocks', $relatedBlocks);
+
+			// Create alias
+			if (empty($block['alias']))
+			{
+				$alias          = OutputFilter::stringURLSafe($block['title'], 'ru-RU') . '-' . uniqid(rand());
+				$block['alias'] = $alias;
+			}
+
+			$i++;
 		}
 
-		return $params;
+		$item->related_blocks = $relatedBlocks;
 	}
 }

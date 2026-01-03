@@ -3,7 +3,7 @@
  * @package   RadicalMart - Related
  * @version   __DEPLOY_VERSION__
  * @author    Dmitriy Vasyukov - https://fictionlabs.ru
- * @copyright Copyright (c) 2024 Fictionlabs. All rights reserved.
+ * @copyright Copyright (c) 2026 Fictionlabs. All rights reserved.
  * @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
  * @link      https://fictionlabs.ru/
  */
@@ -50,6 +50,7 @@ if (!$hidePrice)
 	}
 }
 ?>
+
 <div class="card position-relative mb-3 <?php if (empty($product->in_stock)) echo 'opacity-50'; ?>">
 	<div class="row g-0">
 		<div class="col-md-3 position-relative">
