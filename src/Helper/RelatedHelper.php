@@ -1,7 +1,7 @@
 <?php
 /*
  * @package   RadicalMart - Related
- * @version   __DEPLOY_VERSION__
+ * @version   1.0.0
  * @author    Dmitriy Vasyukov - https://fictionlabs.ru
  * @copyright Copyright (c) 2026 Fictionlabs. All rights reserved.
  * @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
@@ -31,7 +31,7 @@ class RelatedHelper
 	 *
 	 * @return string|void
 	 *
-	 * @since __DEPLOY_VERSION__
+	 * @since 1.0.0
 	 */
 	public static function render(\stdClass $item, string $alias): string
 	{
@@ -81,7 +81,7 @@ class RelatedHelper
 	 *
 	 * @return  string|false  Field string values on success, False on failure.
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0.0
 	 */
 	public static function getProducts($product, $block)
 	{

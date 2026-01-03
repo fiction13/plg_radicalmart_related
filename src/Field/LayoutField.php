@@ -1,7 +1,7 @@
 <?php
 /*
  * @package   RadicalMart - Related
- * @version   __DEPLOY_VERSION__
+ * @version   1.0.0
  * @author    Dmitriy Vasyukov - https://fictionlabs.ru
  * @copyright Copyright (c) 2026 Fictionlabs. All rights reserved.
  * @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
@@ -28,7 +28,7 @@ class LayoutField extends FormField
 	 *
 	 * @var  string
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0.0
 	 */
 	protected $type = 'layout';
 
@@ -37,7 +37,7 @@ class LayoutField extends FormField
 	 *
 	 * @return  string  The field input.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0.0
 	 */
 	protected function getInput()
 	{

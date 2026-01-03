@@ -1,7 +1,7 @@
 <?php
 /*
  * @package   RadicalMart - Related
- * @version   __DEPLOY_VERSION__
+ * @version   1.0.0
  * @author    Dmitriy Vasyukov - https://fictionlabs.ru
  * @copyright Copyright (c) 2026 Fictionlabs. All rights reserved.
  * @license   GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
@@ -33,7 +33,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @var    bool
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0.0
 	 */
 	protected $autoloadLanguage = true;
 
@@ -42,7 +42,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @var  \Joomla\CMS\Application\CMSApplication
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0.0
 	 */
 	protected $app = null;
 
@@ -51,7 +51,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @var  \Joomla\Database\DatabaseDriver
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0.0
 	 */
 	protected $db = null;
 
@@ -60,7 +60,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0.0
 	 */
 	public static function getSubscribedEvents(): array
 	{
@@ -146,7 +146,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @throws  \Exception
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0.0
 	 */
 	public function onContentPrepareForm(Event $event)
 	{
@@ -256,7 +256,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @throws  \Exception
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0.0
 	 */
 	public function onContentAfterTitle(Event $event)
 	{
@@ -279,7 +279,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @throws  \Exception
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0.0
 	 */
 	public function onContentBeforeDisplay(Event $event)
 	{
@@ -302,7 +302,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @throws  \Exception
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0.0
 	 */
 	public function onContentAfterDisplay(Event $event)
 	{
@@ -328,7 +328,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @throws  \Exception
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0.0
 	 */
 	private function display($context, $item, $params, $displayType)
 	{
@@ -374,7 +374,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @throws \Exception
 	 *
-	 * @since __DEPLOY_VERSION__
+	 * @since 1.0.0
 	 */
 	public function onRadicalMartPrepareConfigForm(Form $form, $data)
 	{
@@ -387,7 +387,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @return void
 	 *
-	 * @since __DEPLOY_VERSION__
+	 * @since 1.0.0
 	 */
 	public function normaliseParams(\stdClass &$item): void
 	{
