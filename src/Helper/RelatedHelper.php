@@ -25,9 +25,8 @@ class RelatedHelper
 	/**
 	 * Method for resize images
 	 *
-	 * @param   string  $src     Image src
-	 * @param   int     $width   Image width
-	 * @param   int     $height  Image height
+	 * @param   \stdClass  $item     Product object
+	 * @param   string     $alias   Related block alias
 	 *
 	 * @return string|void
 	 *

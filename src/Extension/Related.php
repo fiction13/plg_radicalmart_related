@@ -242,7 +242,6 @@ class Related extends CMSPlugin implements SubscriberInterface
 		{
 			// Add path
 			Form::addFormPath(JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/forms');
-
 			$form->loadFile('related_category');
 		}
 	}

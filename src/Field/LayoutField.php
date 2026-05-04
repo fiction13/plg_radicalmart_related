@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Factory;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Filesystem\Folder;
 use Joomla\Filesystem\Path;
 use Joomla\CMS\Form\Form;
@@ -71,7 +72,7 @@ class LayoutField extends FormField
 		if ($plugin && $client)
 		{
 			// Get the database object and a new query object.
-			$db    = Factory::getDbo();
+			$db    = Factory::getContainer()->get(DatabaseInterface::class);
 			$query = $db->getQuery(true);
 
 			// Build the query.
