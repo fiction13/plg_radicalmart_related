@@ -35,7 +35,7 @@ class Related extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @since  1.0.0
 	 */
-	protected $autoloadLanguage = true;
+    protected $autoloadLanguage = true;
 
 	/**
 	 * Loads the application object.
